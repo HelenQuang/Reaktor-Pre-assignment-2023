@@ -1,4 +1,4 @@
-const calculateDistance = ({ dronePositionX, dronePositionY }) => {
+export const calculateDistance = ({ dronePositionX, dronePositionY }) => {
   const ratio = 0.001; //ratio between real measurement and XYcoordinates
   const NDZPositionX = 250000; //No Drone Zone original coordinate on X-axis
   const NDZPositionY = 250000; //No Drone Zone original coordinate on Y-axis
@@ -17,4 +17,4 @@ const calculateDistance = ({ dronePositionX, dronePositionY }) => {
   return distance <= 100;
 };
 
-module.exports = calculateDistance;
+export default calculateDistance;
