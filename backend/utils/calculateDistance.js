@@ -1,4 +1,4 @@
-const calculateDistance = (dronePositionX, dronePositionY) => {
+const calculateDistance = ({ dronePositionX, dronePositionY }) => {
   const ratio = 0.001; //ratio between real measurement and XYcoordinates
   const NDZPositionX = 250000; //No Drone Zone original coordinate on X-axis
   const NDZPositionY = 250000; //No Drone Zone original coordinate on Y-axis
@@ -14,13 +14,7 @@ const calculateDistance = (dronePositionX, dronePositionY) => {
     Math.pow(differenceX, 2) + Math.pow(differenceY, 2)
   );
 
-  console.log(distance);
-
-  if (distance <= 100) {
-    return true;
-  } else {
-    return false;
-  }
+  return distance <= 100;
 };
 
-calculateDistance(73111, 223944);
+module.exports = calculateDistance;
