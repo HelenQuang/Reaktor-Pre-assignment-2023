@@ -1,12 +1,24 @@
-import { fetchDroneData } from "./fetchDroneData.js";
 import { calculateDistance } from "./calculateDistance.js";
 
 export const getViolatedDrones = (droneArr) => {
-  const violatedDronesArr = droneArr.filter((drone) => {
-    return calculateDistance({
-      dronePositionX: drone.positionX._text,
-      dronePositionY: drone.positionY._text,
+  const droneArrUpdate = [];
+
+  droneArr.forEach((drone) => {
+    const { distance, isViolated } = calculateDistance(
+      drone.positionX._text,
+      drone.positionY._text
+    );
+
+    droneArrUpdate.push({
+      ...drone,
+      isViolated: isViolated,
+      distance: distance,
     });
   });
-  return violatedDronesArr;
+
+  const violatedDrones = droneArrUpdate.filter((drone) => {
+    return drone.isViolated === true;
+  });
+
+  return violatedDrones;
 };
