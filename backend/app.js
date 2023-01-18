@@ -1,20 +1,28 @@
 import express from "express";
-import fetch from "node-fetch";
-import convert from "xml-js";
+import asyncHandler from "express-async-handler";
+
+import { getViolatedPilots } from "./utils/getViolatedPilots.js";
+import { getViolatedDrones } from "./utils/getViolatedDrones.js";
+import { fetchDroneData } from "./utils/fetchDroneData.js";
+import Info from "./models/infoModel.js";
 
 const app = express();
 
-app.get("/", async (req, res) => {
-  //Fetch drone positions data
-  const response = await fetch(
-    "https://assignments.reaktor.com/birdnest/drones"
-  );
-  const fetchData = await response.text();
+const saveViolatedPilotInfo = async () => {
+  const droneArr = await fetchDroneData();
+  const violatedDrones = getViolatedDrones(droneArr);
+  await getViolatedPilots(violatedDrones);
+};
 
-  //Convert XML to JSON
-  const data = convert.xml2js(fetchData, { compact: true, spaces: 4 });
+setInterval(() => saveViolatedPilotInfo(), 2000);
 
-  res.status(200).json({ status: "success", data });
-});
+app.get(
+  "/violatedInfo",
+  asyncHandler(async (req, res) => {
+    const violatedInfo = await Info.find({}).sort({ createdAt: -1 });
+
+    res.status(200).json({ status: "success", data: violatedInfo });
+  })
+);
 
 export default app;
