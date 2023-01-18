@@ -1,6 +1,7 @@
 import app from "./app.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import path from "path";
 
 process.on("uncaughtException", (err) => {
   console.log("UNCAUGHT EXCEPTION! SHUTING DOWN...");
