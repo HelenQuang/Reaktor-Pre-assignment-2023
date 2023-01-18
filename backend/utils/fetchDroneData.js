@@ -15,9 +15,12 @@ export const fetchDroneData = async () => {
     const fetchData = await response.text();
 
     //Convert XML to JSON
-    const data = convert.xml2js(fetchData, { compact: true, spaces: 4 });
+    const convertedFetchData = convert.xml2js(fetchData, {
+      compact: true,
+      spaces: 4,
+    });
 
-    const droneArr = data.report.capture.drone;
+    const droneArr = convertedFetchData.report.capture.drone;
 
     return droneArr;
   } catch (err) {
