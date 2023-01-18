@@ -1,13 +1,28 @@
-import { getViolatedDrones } from "./getViolatedDrones.js";
 import { fetchPilotInfo } from "./fetchPilotInfo.js";
-import Pilot from "../models/pilotModel.js";
+import Info from "../models/infoModel.js";
 
-export const getViolatedPilots = async (violatedDronesArr) => {
-  Promise.all(
-    violatedDronesArr.map((drone) => fetchPilotInfo(drone.serialNumber._text))
-  ).then(async (data) => {
-    const violatedPilotsData = data;
+export const getViolatedPilots = async (violatedDrones) => {
+  const violatedDronesUpdate = [];
 
-    await Pilot.create({ pilotInfo: violatedPilotsData });
-  });
+  if (violatedDrones.length === 0) {
+    console.log("No violated drones found");
+    return;
+  } else {
+    console.log("Violated drones found");
+
+    violatedDrones.forEach(async (drone) => {
+      const pilotInfo = await fetchPilotInfo(drone.serialNumber._text);
+
+      violatedDronesUpdate.push({
+        droneSerialNumber: drone.serialNumber._text,
+        distance: drone.distance,
+        pilotName: pilotInfo.name,
+        pilotEmail: pilotInfo.email,
+        pilotPhoneNumber: pilotInfo.phoneNumber,
+        observedAt: Date.now(),
+      });
+
+      await Info.create({ info: violatedDronesUpdate });
+    });
+  }
 };
