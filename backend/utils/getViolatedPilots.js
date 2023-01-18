@@ -5,11 +5,8 @@ export const getViolatedPilots = async (violatedDrones) => {
   const violatedDronesUpdate = [];
 
   if (violatedDrones.length === 0) {
-    console.log("No violated drones found");
     return;
   } else {
-    console.log("Violated drones found");
-
     violatedDrones.forEach(async (drone) => {
       const pilotInfo = await fetchPilotInfo(drone.serialNumber._text);
 
